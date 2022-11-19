@@ -1,0 +1,448 @@
+#include <iostream>
+#include <string>
+#include <stdlib.h> //Imports srand and rand along with the exit function
+using namespace std;
+
+// nice to have voids
+void ClearScreen();
+
+// variables for Lucky Survival
+int menuSelect;
+// health variables
+int maxHealth = 40, Health = 40, minHealth = 1;
+// random number genorator variables
+const int UPPER_LIMIT = 5, LOWER_LIMIT = -5;
+int target = (rand() %(UPPER_LIMIT - LOWER_LIMIT) + LOWER_LIMIT);
+// daycounter
+int days = 0;
+
+// voids for Lucky Survival
+void LS_Options();
+// note ls quit is now used as a quit function for all of the apps and not just lucky survival
+void LS_Quit();
+void LS_StartOrRestart();
+void LS_RollDice();
+void Lucky_Survival();
+void LS_ActionsWhenDiceRolled();
+
+// rng minigame void
+void RNG_MiniGame();
+
+// calculator project voids
+void Prompt_Operator(int num1,int num2);
+double Power_Finder(int num1, int num2);
+void Calculate();
+void StartCalculation();
+void CalculatorProject();
+
+
+// start of actual code
+// int main acts as a main menu to go to all other games
+int main() {
+  int selectApp;
+  ClearScreen();
+  cout << "welcome to the combination of my applications writen in c++!\n";
+  cout << "press 0 to quit\n\n";
+  cout << "press 1 to play lucky survival\n\n";
+  
+  cout << "these next apps were made in class \n(they were made by the teacher and I stole them)\n\n";
+  cout << "press 2 to play the rng minigame\n\n";
+  cout << "press 3 to use the calculator\n\n";
+  
+  cin >> selectApp;
+  while (selectApp < 0 or selectApp > 3) {
+		
+    cout << "Please select a number in between 1 and 3!\n";
+		cin >> selectApp;
+    
+	}
+  
+  switch (selectApp) {
+    // quit
+    case 0: {
+      exit(0);
+    }
+    // LS
+    case 1: {
+      Lucky_Survival();
+    }
+    
+    // rng minigame
+    case 2: {
+      RNG_MiniGame();
+    }
+    
+    // calculator
+    case 3: {
+      CalculatorProject();
+    }
+  
+    
+  }
+}
+
+// nice void to have
+void ClearScreen(){
+  cout << "\033[2J\033[0;0H"; //Use this to clear the output
+  system ("clear");
+}
+
+// voids of lucky survival
+// starts the game
+void Lucky_Survival (){
+  LS_StartOrRestart();
+}
+
+// lucky survival voids
+void LS_StartOrRestart(){
+// states the value of some variables and broadcasts a title screen
+  maxHealth = 15, Health = 15, days = 0;
+      ClearScreen();
+      cout << "Hello and welcome to lucky survival!\n";
+      cout << "Every time you press 1 another day passes and you get a number between \n-5 and positive 5!\n\n";
+      cout << "You will then gain or lose health depending on the number you get.\n";
+      cout << "Surive as many days as possible!\n\n";
+      cout << "1 to roll, 2 to restart, 3 to quit!\n\n";
+      cout << "After starting the game you must type a number two times to enter a comand.\n";
+      cout << "PS try not to click a letter or youll break everything. \n";
+  // starts the cycle of the game
+  LS_Options();
+  
+}
+
+void LS_Quit(){
+  main();
+}
+
+void LS_RollDice(){
+  target = (rand() %(UPPER_LIMIT - LOWER_LIMIT) + LOWER_LIMIT);
+      // displays dice number you rolled
+      cout << "your dice roll is " << target << "\n";
+      LS_ActionsWhenDiceRolled();
+      // display dice roll
+      //displaying health values
+      cout << Health << " out of " << maxHealth << " health remaining \n \n";
+      cout << "day " << days << "\n \n \n";
+      cin >> menuSelect;
+      // addign to days
+      days ++;
+      
+      // next move is done by resetting options void
+      LS_Options ();
+}
+
+void LS_ActionsWhenDiceRolled() {
+    
+    // roll random dice
+    srand(time(0)); //sets the seed for the random number
+    // if dice is positive
+    if (target == 1){
+        cout << "+ 1 health\n";
+        Health++;
+      }
+    if (target == 2){
+        cout << "+ 2 health\n";
+        Health++;
+        Health++;
+      }
+    if (target == 3){
+        cout << "+ 3 health\n";
+        Health++;
+        Health++;
+        Health++;
+      }
+    if (target == 4){
+        cout << "+ 4 health\n";
+        Health++;
+        Health++;
+        Health++;
+        Health++;
+      }
+    if (target == 5){
+        cout << "+ 4 health\n";
+        cout << "+ 1 max health\n";
+        Health++;
+        Health++;
+        Health++;
+        Health++;
+        maxHealth++;
+      }
+    // if dice is zero
+    if (target == 0){
+        cout << "health value unchanged\n";
+        Health = Health;
+      }
+    // if the dice is a negative number
+    if (target == -1){
+        cout << "- 1 health\n";
+        Health--;
+      }
+    if (target == -2){
+        cout << "- 2 health\n";
+        Health--;
+        Health--;   
+      }
+    if (target == -3){
+        cout << "- 3 health\n";
+        Health--;
+        Health--;
+        Health--;
+      }
+    if (target == -4){
+        cout << "- 4 health\n"; 
+        Health--;
+        Health--;
+        Health--;
+        Health--;
+      }
+    if (target == -5){
+        cout << "- 4 health\n";
+        cout << "- 1 max health\n";
+        Health--;
+        Health--;
+        Health--;
+        Health--;
+        maxHealth--;
+      }
+    // check to make sure max health dosent go above health
+    if (maxHealth < Health){
+      Health = maxHealth;
+    }
+    // game over if you lose all health
+     if (Health < minHealth){
+       cout << "\n\n\nyou lose!\n";
+       cout << "you survived " << days << " days! \n\n";
+       cout << "Press 2 to restart, press 3 to quit the game! \n";
+       
+       cin >> menuSelect;
+  while (menuSelect < 1 or menuSelect > 3) {
+		
+    
+		cin >> menuSelect;}
+
+    switch (menuSelect) {
+      case 2:{
+        LS_StartOrRestart();
+      }
+
+      case 3:{
+        LS_Quit();
+      }
+      
+    }
+
+    
+	}
+    
+       
+       
+  }
+
+void LS_Options (){
+  // allows you to enter numers to trigger diffrent options
+  // the diffrent options are diffrent voids
+  cin >> menuSelect;
+  while (menuSelect < 1 or menuSelect > 3) {
+		
+    cout << "Please select a number in between 1 and 3!\n";
+		cin >> menuSelect;
+    
+	}
+  
+  
+  // start of the switch
+  switch (menuSelect) {
+    
+    // roll dice
+    case 1: {
+      LS_RollDice();
+    }
+    
+    // reset
+    case 2: {
+      LS_StartOrRestart();
+    }
+    
+    // quit
+    case 3: {
+      LS_Quit();
+    }
+  
+    
+  }
+  // end of the switch command
+  
+}
+
+// end of lucky survival voids
+
+// rng minigame void
+
+void RNG_MiniGame(){
+  //--------Declaration---------
+	srand(time(0)); //sets the seed for the random number
+	const int UPPER_LIMIT = 99, LOWER_LIMIT = 0;
+	int menu_select, shot, target = (rand() %(UPPER_LIMIT - LOWER_LIMIT) + LOWER_LIMIT);
+	//Target is initialized as a random integer using the srand(1) function
+	//rand()%A + B works by generating a random number in a range of A numbers, starting at B
+	//Example: rand()%40 + 60 will generate between 60 and 99. Range of 40 with 60 as the starting point
+	
+	ClearScreen();
+	//-------Menu----------
+	cout << "Welcome to the RNG Guessing Game! Which option would you like to pick?\n";
+	cout << "1: Play the Game \n2: Read the Rules \n3: Exit\n";
+	cin >> menu_select;
+	//Check for validility
+	while (menu_select < 1 or menu_select > 3) {
+		cout << "Please select a number in between 1 and 3!\n";
+    cin >> menu_select;
+	}
+	switch (menu_select) {
+	case 1: {
+		//system("cls"); //Use this to clear the output screen on Visual Studio
+		cout << "\033[2J\033[0;0H"; //Use this to clear the output screen on Replit
+		for (int attempts = 5; attempts > 0; attempts--) {
+			cout << "You have " << attempts << " attempts left\n";
+			//-------Taking User Input------
+			cout << "Enter in a number between " << LOWER_LIMIT << " and " << UPPER_LIMIT << endl;
+			cin >> shot;
+			//-------Validate Shot----------
+			while (shot < LOWER_LIMIT or shot > UPPER_LIMIT) {
+				cout << "That's not a valid answer!\n";
+				cout << "Enter in a number between " << LOWER_LIMIT << " and " << UPPER_LIMIT << endl;
+			}
+			//------Compare shot with the target-------
+			if (shot == target) {
+				cout << "Congrats! You've won!\n";
+				LS_Quit();
+			}
+			else if (shot > target)
+				cout << "You're above the mark! Guess a lower number!\n";
+			else if (shot < target)
+				cout << "You're below the mark! Guess a higher number!\n";
+		}
+		//-----Count the game as a loss if attempts run out
+		cout << "\n\nYou lost! The target was " << target << endl;
+		cout << "Better luck next time! Press any number to restart\n";
+		cin >> shot;
+    cout << "\033[2J\033[0;0H"; //Use this to clear the output screen on Replit
+    RNG_MiniGame();
+    }
+	case 2: {
+		cout << "You have five attempts to guess the correct number between 0 and 99\n";
+		break;}
+	case 3: {
+		LS_Quit();
+	}
+	}
+
+	LS_Quit();
+}
+
+// end of rng minigame voids
+
+// calculator project voids
+
+void Prompt_Operator(int num1,int num2)
+{
+  cout<<"1: Add "<<num1 << " and "<<num2<<endl;
+  cout<<"2: Subtract "<<num1 << " and "<<num2<<endl;
+  cout<<"3: Multiply "<<num1 << " and "<<num2<<endl;
+  cout<<"4: Divide "<<num1 << " by "<<num2<<endl;
+  cout<<"5: Find "<<num1 << " to the power of "<<num2<<endl;
+}
+double Power_Finder(int num1, int num2)
+{
+  double result = 1;
+  while (num2 !=0)
+    {
+      result *= num1;
+      --num2;
+    }
+  return result;
+}
+void Calculate()
+{
+  int num1,num2;
+  cout<<"Please enter two numbers separated by a space for calculation"<<endl;
+  cin>>num1>>num2;
+  int selection;
+  Prompt_Operator(num1, num2);
+  cin>>selection;
+  while(selection <1 or selection > 5)
+    {
+      cout<<"This is not a valid selection";
+      Prompt_Operator(num1, num2);
+      cin>>selection;
+    }
+  switch(selection)
+    {
+      case 1:
+        {
+          cout<<"The sum of "<<num1<<" and "<<num2<<" is equal to "<<(num1+num2)<<endl;
+          break;
+        }
+      case 2:
+        {
+          cout<<"The difference of "<<num1<<" and "<<num2<<" is equal to "<<(num1-num2)<<endl;
+          break;
+        }
+      case 3:
+        {
+          cout<<"The product of "<<num1<<" and "<<num2<<" is equal to "<<(num1*num2)<<endl;
+          break;
+        }
+      case 4:
+        {
+          cout<<num1<<" divided by "<<num2<<" is equal to "<<((double)num1/num2)<<endl;
+          break;
+        }
+      case 5:
+        {
+          cout<<num1<<" to the power of "<<num2<<" is equal to "<<Power_Finder(num1,num2)<<endl;
+          break;
+        }
+    }
+do {
+		cout << "Enter 1 to continue\n";
+		cin >> selection;
+	}while(selection!=1);
+
+}
+void StartCalculation()
+{
+  //The condition on the While loop is true, therefore it runs forever
+	while (true) {
+		//-------MAIN MENU----------
+		int selection;
+		//Clear Screen
+		
+		ClearScreen();
+		cout << "Welcome to the Standard Calculator!\n";
+		cout << "1: Calculate \n2: Exit\n";
+		cin >> selection;
+		//Always validate your menu selection
+		while (selection < 1 or selection > 2) {
+			ClearScreen();
+      cout << "That is not a valid response! \nPlease enter 1 or 2!\n";
+			cout << "1: Calculate \n2: Exit\n";
+			cin >> selection;
+		}
+		switch (selection) {
+		case 1: {
+			Calculate();
+			break;}
+		case 2: {
+			LS_Quit();
+		}
+		}
+
+	}
+}
+
+void CalculatorProject()
+{
+  StartCalculation();
+}
+
+// end of calculator project voids
